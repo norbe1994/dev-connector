@@ -2,6 +2,7 @@ const express = require('express')
 const router = express.Router()
 const { validationResult } = require('express-validator/check')
 const auth = require('../../middleware/auth')
+const ObjectId = require('mongoose').Types.ObjectId
 // models
 const Post = require('../../models/Post')
 const Profile = require('../../models/Profile')
@@ -99,6 +100,62 @@ router.delete('/:post_id', auth, async (req, res) => {
 			return res.status(400).json({ msg: 'Incorrect ID format' })
 		}
 
+		res.status(500).send('Server error')
+	}
+})
+
+// @route PUT api/posts/like/:post_id
+// @desc Like a post
+// @access Private
+router.put('/like/:post_id', auth, async (req, res) => {
+	try {
+		const post = await Post.findById(req.params.post_id)
+
+		// check if the logged in user has already liked the post
+		if (
+			post.likes.filter(like => like.user.toString() === req.user.id).length > 0
+		) {
+			return res.status(400).json({ msg: 'Post already liked by this user' })
+		}
+		// if it has not, 'like' it
+		post.likes.unshift({ user: req.user.id })
+		await post.save()
+
+		res.json(post.likes)
+	} catch (error) {
+		console.error(error.message)
+		res.status(500).send('Server error')
+	}
+})
+
+// @route PUT api/posts/unlike/:post_id
+// @desc Unlike a post
+// @access Private
+router.put('/unlike/:post_id', auth, async (req, res) => {
+	try {
+		let post = await Post.findById(req.params.post_id)
+
+		// check if the logged in user has not liked the post
+		if (
+			post.likes.filter(like => like.user.toString() === req.user.id).length ===
+			0
+		) {
+			return res
+				.status(400)
+				.json({ msg: 'Post has not been liked by this user' })
+		}
+		// if it has, 'unlike' it
+		post = await Post.findOneAndUpdate(
+			{ _id: req.params.post_id },
+			{ $pull: { likes: { user: new ObjectId(req.user.id) } } },
+			{ new: true }
+		)
+
+		await post.save()
+
+		res.json(post.likes)
+	} catch (error) {
+		console.error(error.message)
 		res.status(500).send('Server error')
 	}
 })
