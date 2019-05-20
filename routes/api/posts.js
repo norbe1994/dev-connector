@@ -5,7 +5,6 @@ const auth = require('../../middleware/auth')
 const ObjectId = require('mongoose').Types.ObjectId
 // models
 const Post = require('../../models/Post')
-const Profile = require('../../models/Profile')
 const User = require('../../models/User')
 // validations
 const postValidations = require('../../validations/Post')
