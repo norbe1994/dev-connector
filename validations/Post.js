@@ -6,4 +6,9 @@ module.exports = validations = {
 			.not()
 			.isEmpty(),
 	],
+	commentCreation: [
+		check('text', 'Text is required')
+			.not()
+			.isEmpty(),
+	],
 }
