@@ -1,4 +1,6 @@
 {
 	"mongoURI": "mongodb+srv://norberto:norbertoDB@devconnector-4cgbl.mongodb.net/test?retryWrites=true",
-	"jwtSecret": "MySuperSecretToken3000"
+	"jwtSecret": "MySuperSecretToken3000",
+	"githubClientId": "6c6b455db5eea234d2d2",
+	"githubSecret": "6b58de065e49b4d5b98d47f0eef6634df704fa91"
 }
