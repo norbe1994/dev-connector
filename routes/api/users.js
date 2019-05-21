@@ -11,7 +11,7 @@ const User = require('../../models/User')
 const userRegistrationValidations = require('../../validations/User')
 	.userRegistration
 
-// @route GET api/users
+// @route POST api/users
 // @desc Register user
 // @access Public
 router.post('/', userRegistrationValidations, async (req, res) => {
@@ -19,6 +19,7 @@ router.post('/', userRegistrationValidations, async (req, res) => {
 
 	if (!errors.isEmpty()) {
 		return res.status(400).json({ errors: errors.array() })
+		console.log('Do I fail here?')
 	}
 
 	const { name, email, password } = req.body
