@@ -1,7 +1,11 @@
 import React, { Fragment, useState } from 'react'
 import { Link } from 'react-router-dom'
+import { setAlert } from '../../actions/alert'
+import { register } from '../../actions/auth'
+import { connect } from 'react-redux'
+import PropTypes from 'prop-types'
 
-const Register = () => {
+const Register = ({ setAlert, register }) => {
 	const [formData, setFormData] = useState({
 		name: '',
 		email: '',
@@ -36,7 +40,8 @@ const Register = () => {
 					type: '',
 				},
 			})
-			console.log('registered.')
+
+			register({ name, email, password })
 		}
 	}
 
@@ -57,7 +62,6 @@ const Register = () => {
 						name='name'
 						value={name}
 						onChange={e => onChange(e)}
-						required
 					/>
 				</div>
 				<div className='form-group'>
@@ -67,7 +71,6 @@ const Register = () => {
 						name='email'
 						value={email}
 						onChange={e => onChange(e)}
-						required
 					/>
 					<small className='form-text'>
 						This site uses Gravatar so if you want a profile image, use a
@@ -81,7 +84,6 @@ const Register = () => {
 						name='password'
 						value={password}
 						onChange={e => onChange(e)}
-						minLength='6'
 					/>
 				</div>
 				<div className='form-group'>
@@ -91,7 +93,6 @@ const Register = () => {
 						name='password2'
 						value={password2}
 						onChange={e => onChange(e)}
-						minLength='6'
 					/>
 				</div>
 				<input type='submit' className='btn btn-primary' value='Register' />
@@ -103,4 +104,12 @@ const Register = () => {
 	)
 }
 
-export default Register
+Register.propTypes = {
+	setAlert: PropTypes.func.isRequired,
+	register: PropTypes.func.isRequired,
+}
+
+export default connect(
+	null,
+	{ setAlert, register }
+)(Register)
