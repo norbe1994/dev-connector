@@ -7,27 +7,44 @@ const Register = () => {
 		email: '',
 		password: '',
 		password2: '',
+		alert: {
+			msg: '',
+			type: '',
+		},
 	})
 
-	const { name, email, password, password2 } = formData
+	const { name, email, password, password2, alert } = formData
 
 	const onChange = e =>
-		setFormData({
-			...formData,
-			[e.target.name]: e.target.value,
-		})
+		setFormData({ ...formData, [e.target.name]: e.target.value })
 
 	const onSubmit = async e => {
 		e.preventDefault()
 		if (password !== password2) {
-			console.log('passwords do not match')
+			setFormData({
+				...formData,
+				alert: {
+					msg: 'Passwords do not match',
+					type: 'danger',
+				},
+			})
 		} else {
-			console.log('Success')
+			setFormData({
+				...formData,
+				alert: {
+					msg: '',
+					type: '',
+				},
+			})
+			console.log('registered.')
 		}
 	}
 
 	return (
 		<Fragment>
+			{alert.msg && (
+				<div className={`alert alert-${alert.type}`}>{alert.msg}</div>
+			)}
 			<h1 className='large text-primary'>Sign Up</h1>
 			<p className='lead'>
 				<i className='fas fa-user' /> Create Your Account
